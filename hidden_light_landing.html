@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hidden Light - Hashkifa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .section {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.4)), url('https://images.pexels.com/photos/356966/pexels-photo-356966.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop') center/cover;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .logo {
+            width: 200px;
+            height: auto;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 2s ease forwards;
+        }
+
+        .hero-title {
+            font-size: clamp(3rem, 8vw, 8rem);
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            margin-bottom: 2rem;
+            opacity: 0;
+            animation: fadeInUp 2s ease 0.5s forwards;
+            text-shadow: 2px 2px 20px rgba(252, 176, 23, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 300;
+            margin-bottom: 3rem;
+            opacity: 0;
+            animation: fadeInUp 2s ease 1s forwards;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            animation: fadeInUp 2s ease 1.5s forwards, bounce 2s infinite 3s;
+        }
+
+        .scroll-indicator::after {
+            content: '↓';
+            font-size: 2rem;
+            color: #fcb017;
+        }
+
+        .text-reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+
+        .text-reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .dramatic-text {
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 700;
+            text-align: center;
+            margin: 2rem 0;
+            line-height: 1.2;
+            text-shadow: 1px 1px 10px rgba(0,0,0,0.8);
+        }
+
+        .body-text {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-weight: 400;
+            text-align: center;
+            margin: 1.5rem 0;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.8;
+        }
+
+        .video-section {
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://images.pexels.com/photos/3631711/pexels-photo-3631711.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop') center/cover fixed;
+        }
+
+        .vatican-section {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.3)), url('https://images.pexels.com/photos/2865345/pexels-photo-2865345.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop') center/cover fixed;
+        }
+
+        .menorah-section {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/6648577/pexels-photo-6648577.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop') center/cover fixed;
+        }
+
+        .temple-section {
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.4)), url('https://images.pexels.com/photos/2850334/pexels-photo-2850334.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop') center/cover fixed;
+        }
+
+        .underground-section {
+            background: linear-gradient(rgba(0,0,0,0.9), rgba(0,0,0,0.7)), url('https://images.pexels.com/photos/2850290/pexels-photo-2850290.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop') center/cover fixed;
+        }
+
+        .revelation-section {
+            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/1624438/pexels-photo-1624438.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop') center/cover fixed;
+        }
+
+        .final-section {
+            background: linear-gradient(45deg, #000 0%, #111 50%, #fcb017 100%);
+            text-align: center;
+        }
+
+        .highlight {
+            color: #fcb017;
+            font-weight: 700;
+        }
+
+        .question {
+            font-style: italic;
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            color: #fcb017;
+            margin: 2rem 0;
+            text-shadow: 1px 1px 10px rgba(252, 176, 23, 0.5);
+        }
+
+        .whisper-text {
+            font-style: italic;
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            opacity: 0.8;
+            margin: 1rem 0;
+        }
+
+        .cta-button {
+            background: #fcb017;
+            color: #fff;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 2rem 0;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .cta-button:hover {
+            background: #e69d00;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(252, 176, 23, 0.3);
+        }
+
+        .cta-button.secondary {
+            background: transparent;
+            border: 2px solid #fcb017;
+            color: #fcb017;
+            font-size: 1rem;
+            padding: 0.75rem 1.5rem;
+        }
+
+        .cta-button.secondary:hover {
+            background: #fcb017;
+            color: #fff;
+        }
+
+        .cta-button.large {
+            font-size: 1.5rem;
+            padding: 1.25rem 2.5rem;
+            margin: 3rem 0;
+        }
+
+        .video-placeholder {
+            width: 100%;
+            max-width: 800px;
+            height: 450px;
+            background: linear-gradient(45deg, #111, #333);
+            border-radius: 10px;
+            margin: 3rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fcb017;
+            font-size: 1.5rem;
+            border: 3px solid #fcb017;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .video-placeholder::before {
+            content: '▶';
+            font-size: 4rem;
+            position: absolute;
+            opacity: 0.7;
+        }
+
+        .film-cover {
+            width: 100%;
+            max-width: 600px;
+            height: 800px;
+            background: linear-gradient(45deg, #000, #fcb017, #000);
+            border-radius: 15px;
+            margin: 3rem auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 1.3rem;
+            border: 4px solid #fcb017;
+            box-shadow: 0 20px 40px rgba(252, 176, 23, 0.3);
+            position: relative;
+        }
+
+        .film-cover::before {
+            content: 'HIDDEN LIGHT';
+            font-size: 3rem;
+            font-weight: 900;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.8);
+            margin-bottom: 1rem;
+        }
+
+        .film-cover::after {
+            content: 'FILM POSTER PLACEHOLDER';
+            font-size: 1rem;
+            opacity: 0.7;
+        }
+
+        .thumbnail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .thumbnail {
+            background: linear-gradient(135deg, #111, #333);
+            border-radius: 10px;
+            height: 200px;
+            border: 2px solid #fcb017;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fcb017;
+            font-size: 1rem;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .thumbnail:hover {
+            transform: scale(1.05);
+        }
+
+        .cta-section {
+            background: rgba(252, 176, 23, 0.1);
+            padding: 3rem 2rem;
+            border-radius: 15px;
+            margin: 3rem 0;
+            text-align: center;
+            border: 1px solid rgba(252, 176, 23, 0.3);
+        }
+
+        .price-highlight {
+            font-size: 2rem;
+            color: #fcb017;
+            font-weight: 700;
+            margin: 1rem 0;
+        }
+
+        .urgency-text {
+            color: #fcb017;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin: 1rem 0;
+        }
+
+        .film-title {
+            font-size: clamp(3rem, 7vw, 6rem);
+            font-weight: 900;
+            color: #fcb017;
+            text-shadow: 2px 2px 20px rgba(252, 176, 23, 0.8);
+            margin: 2rem 0;
+            letter-spacing: 0.05em;
+        }
+
+        .rabbi-placeholder {
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(45deg, #333, #555);
+            border-radius: 10px;
+            margin: 2rem auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fcb017;
+            font-size: 1.2rem;
+            border: 2px solid #fcb017;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateX(-50%) translateY(0);
+            }
+            40% {
+                transform: translateX(-50%) translateY(-10px);
+            }
+            60% {
+                transform: translateX(-50%) translateY(-5px);
+            }
+        }
+
+        .parallax-element {
+            position: absolute;
+            opacity: 0.1;
+            font-size: 20rem;
+            font-weight: 900;
+            color: #fcb017;
+            pointer-events: none;
+            z-index: 1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero section">
+        <div class="parallax-element" style="top: 10%; right: -10%; transform: rotate(-15deg);">HIDDEN</div>
+        <div class="hero-content">
+            <img src="https://hashkifa.com/_next/static/media/logo-yellow-white.a19b2b92.svg" alt="Hashkifa" class="logo">
+            <h1 class="hero-title">HIDDEN LIGHT</h1>
+            <p class="hero-subtitle">The untold story of the most sacred artifact in Jewish history</p>
+        </div>
+        <div class="scroll-indicator"></div>
+    </section>
+
+    <!-- Opening Hook -->
+    <section class="vatican-section section">
+        <div class="text-reveal">
+            <p class="dramatic-text">Somewhere beneath the marble floors of the <span class="highlight">smallest country in the world</span>…</p>
+            <p class="body-text">…lie secrets too powerful to say out loud. Secrets that have echoed in Jewish hearts for centuries.</p>
+            <div class="video-placeholder">
+                Vatican Aerial Video Placeholder<br>
+                <small>Pexels Video: Aerial view of Vatican City</small>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Question -->
+    <section class="video-section section">
+        <div class="text-reveal">
+            <p class="body-text">For nearly 2,000 years, one haunting question has remained unanswered:</p>
+            <h2 class="question">Where is the Menorah?</h2>
+            
+            <div class="cta-section">
+                <p class="body-text">Discover the truth that has been hidden for centuries</p>
+                <button class="cta-button">Watch Hidden Light Now</button>
+                <button class="cta-button secondary">Learn More</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Theories -->
+    <section class="menorah-section section">
+        <div class="text-reveal">
+            <p class="body-text">Was it drowned in the Tiber?</p>
+            <div class="video-placeholder">
+                Tiber River Video Placeholder<br>
+                <small>Saint Angelo Bridge & Vatican View</small>
+            </div>
+            <p class="body-text">Is it buried beneath the Temple Mount?</p>
+            <p class="body-text">Is it hidden in a cave beneath a field?</p>
+            <p class="body-text">Or in a desert?</p>
+            <p class="body-text">Is it in someone's private collection?</p>
+            <p class="dramatic-text">Or… is it really beneath the <span class="highlight">Vatican</span>?</p>
+            <p class="whisper-text">*So many theories. So many whispers.*</p>
+            <p class="dramatic-text">I had to discover the truth.</p>
+        </div>
+    </section>
+
+    <!-- Historical Context -->
+    <section class="temple-section section">
+        <div class="text-reveal">
+            <p class="dramatic-text">Rome, 70 CE.</p>
+            <p class="body-text">The Beis HaMikdash is in flames. Sacred vessels are stolen. And the most recognizable symbol of spiritual light is marched through the streets as a trophy of conquest.</p>
+            
+            <div class="film-cover"></div>
+            
+            <p class="body-text">Empires rose. Empires fell.</p>
+            <p class="dramatic-text">But we never stopped remembering.</p>
+            
+            <div class="cta-section">
+                <p class="urgency-text">Limited Time: Tishah B'Av Special Release</p>
+                <p class="price-highlight">Watch Now</p>
+                <button class="cta-button large">Get Access to Hidden Light</button>
+                <p class="body-text">Join thousands discovering the truth</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Whispers -->
+    <section class="underground-section section">
+        <div class="text-reveal">
+            <p class="body-text">The whispers persisted.</p>
+            <p class="body-text">That the Menorah still exists.</p>
+            <p class="body-text">That it's hidden.</p>
+            <p class="body-text">Intentionally, quietly.</p>
+            <p class="body-text">Far from the public eye.</p>
+            <p class="dramatic-text">Most dismissed it as legend.</p>
+            <p class="dramatic-text highlight">Until now.</p>
+        </div>
+    </section>
+
+    <!-- The Discovery -->
+    <section class="revelation-section section">
+        <div class="text-reveal">
+            <p class="body-text">A forgotten interview resurfaces.</p>
+            <p class="body-text">An aging man speaks of a journey beneath the Vatican, and what he saw there.</p>
+            <p class="body-text">That testimony sparks a modern-day search involving world-renowned historians, Israeli officials, even the halls of the Knesset.</p>
+            <p class="dramatic-text">A journey of discovery that led me further than I could have imagined.</p>
+        </div>
+    </section>
+
+    <!-- The Trail -->
+    <section class="vatican-section section">
+        <div class="text-reveal">
+            <p class="dramatic-text">This is not a fantasy.</p>
+            <p class="dramatic-text">It is a trail I walked.</p>
+            <p class="body-text">One paved with carved menorahs etched 2,000 years ago by Jewish slaves into Roman stone.</p>
+            <p class="body-text">One that descends into catacombs off-limits to the public.</p>
+            <p class="body-text">One that leads to doors suddenly slammed shut… and questions deemed "too sensitive" to answer.</p>
+        </div>
+    </section>
+
+    <!-- The Investigation -->
+    <section class="underground-section section">
+        <div class="text-reveal">
+            <div class="rabbi-placeholder">Rabbi Yoel Gold<br>Placeholder Image</div>
+            
+            <div class="thumbnail-grid">
+                <div class="thumbnail">Scene: Vatican Investigation<br>Thumbnail Placeholder</div>
+                <div class="thumbnail">Scene: Ancient Catacombs<br>Thumbnail Placeholder</div>
+                <div class="thumbnail">Scene: Police Detention<br>Thumbnail Placeholder</div>
+                <div class="thumbnail">Scene: Israeli Officials<br>Thumbnail Placeholder</div>
+            </div>
+            
+            <p class="body-text">At one point, we were detained by Italian police for what we uncovered. Even they were stunned.</p>
+            <p class="body-text">At another, the head of Israel's Ministry of Heritage received a mysterious call from the Italian Parliament.</p>
+            <p class="dramatic-text">And then… we found someone who may be the only living Jew to ever step inside the Vatican's forbidden lower levels.</p>
+            
+            <div class="cta-section">
+                <p class="body-text">See the exclusive footage and interviews</p>
+                <button class="cta-button">Watch Full Investigation</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Question Deepens -->
+    <section class="revelation-section section">
+        <div class="text-reveal">
+            <h2 class="question">What happens when your history... is someone else's secret?</h2>
+        </div>
+    </section>
+
+    <!-- About the Film -->
+    <section class="menorah-section section">
+        <div class="text-reveal">
+            <p class="dramatic-text">This year's film is <span class="highlight">unprecedented</span> in the Jewish World.</p>
+            <p class="body-text">Yoel Gold takes you into places where no cameras have gone before.</p>
+            <p class="body-text">To ancient ruins, hidden chambers, and unexpected revelations buried not just underground… but under layers of silence, politics, and power.</p>
+            
+            <div class="video-placeholder">
+                Behind the Scenes Video<br>
+                <small>Exclusive: Making of Hidden Light</small>
+            </div>
+            
+            <div class="cta-section">
+                <p class="body-text">Experience what others couldn't capture</p>
+                <button class="cta-button">Stream Hidden Light</button>
+                <button class="cta-button secondary">Download for Offline</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- The Meaning -->
+    <section class="vatican-section section">
+        <div class="text-reveal">
+            <p class="body-text">But this production is not just about what was lost.</p>
+            <p class="dramatic-text">It's about what was <span class="highlight">never taken</span>.</p>
+            <p class="body-text">The Menorah was never just a vessel.</p>
+            <p class="dramatic-text">It is a symbol.</p>
+            <h2 class="question">What does it mean for us… if it's still there, buried in darkness beneath the Vatican?</h2>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="final-section section">
+        <div class="text-reveal">
+            <p class="dramatic-text">This Tishah B'Av…</p>
+            <p class="dramatic-text">Don't just mourn.</p>
+            <p class="dramatic-text highlight">Uncover the hidden light.</p>
+            
+            <h1 class="film-title">HIDDEN LIGHT</h1>
+            
+            <div class="film-cover"></div>
+            
+            <p class="body-text">The film that will fill your heart with longing and love for our history, our heritage, and connect you more closely with your Jewish brothers and sisters.</p>
+            
+            <p class="body-text">The film that will take you closer to the truth than anyone has ever gone and prove what you were never supposed to know.</p>
+            
+            <p class="body-text">The film that will pull you into a search, the world's most powerful institution would do anything to prevent.</p>
+            
+            <div class="cta-section">
+                <p class="urgency-text">Available Now - Limited Time</p>
+                <p class="price-highlight">Special Tishah B'Av Price</p>
+                <button class="cta-button large">Watch Hidden Light Now</button>
+                <button class="cta-button secondary">Gift to a Friend</button>
+                <p class="body-text">30-Day Money Back Guarantee</p>
+                <p class="body-text">Instant Access • HD Quality • English Subtitles</p>
+            </div>
+            
+            <div class="thumbnail-grid">
+                <div class="thumbnail">Bonus: Director Commentary<br>Exclusive Content</div>
+                <div class="thumbnail">Bonus: Extended Interviews<br>Never-Before-Seen</div>
+                <div class="thumbnail">Bonus: Historical Documents<br>Digital Archive</div>
+            </div>
+            
+            <p class="whisper-text">*From Rome to Yerushalayim, the story continues…*</p>
+            
+            <button class="cta-button large">Get Instant Access</button>
+        </div>
+    </section>
+
+    <script>
+        // Scroll-triggered animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('revealed');
+                }
+            });
+        }, observerOptions);
+
+        // Observe all text-reveal elements
+        document.querySelectorAll('.text-reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Parallax effect for background elements
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.parallax-element');
+            
+            parallaxElements.forEach(element => {
+                const speed = 0.5;
+                const yPos = -(scrolled * speed);
+                element.style.transform = `translate3d(0, ${yPos}px, 0) rotate(-15deg)`;
+            });
+        });
+
+        // Smooth scrolling for better performance
+        document.documentElement.style.scrollBehavior = 'smooth';
+    </script>
+</body>
+</html>
